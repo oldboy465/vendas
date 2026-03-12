@@ -1,0 +1,123 @@
+[
+  {
+    "id": 1,
+    "cliente": "Aryelle",
+    "produto": "Batom Matte",
+    "qtd": 1,
+    "valor": 20,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-03-15",
+    "status": "PAGO"
+  },
+  {
+    "id": 2,
+    "cliente": "Ariele",
+    "produto": "Lip Oil Morango",
+    "qtd": 1,
+    "valor": 40,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-03-15",
+    "status": "PAGO"
+  },
+  {
+    "id": 3,
+    "cliente": "Aryelle",
+    "produto": "Kit Pessegura",
+    "qtd": 2,
+    "valor": 55,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-04-10",
+    "status": "PENDENTE"
+  },
+  {
+    "id": 4,
+    "cliente": "Brena",
+    "produto": "Kit Pessegura",
+    "qtd": 1,
+    "valor": 55,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-04-01",
+    "status": "PENDENTE"
+  },
+  {
+    "id": 5,
+    "cliente": "Bruna",
+    "produto": "Lip Oil Pêssego",
+    "qtd": 1,
+    "valor": 40,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-04-10",
+    "status": "PENDENTE"
+  },
+  {
+    "id": 6,
+    "cliente": "Emilene",
+    "produto": "Lip Oil Morango",
+    "qtd": 1,
+    "valor": 40,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-03-20",
+    "status": "PAGO"
+  },
+  {
+    "id": 7,
+    "cliente": "Jonata",
+    "produto": "Limp Tint",
+    "qtd": 1,
+    "valor": 15,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-04-01",
+    "status": "PAGO"
+  },
+  {
+    "id": 8,
+    "cliente": "Jotania",
+    "produto": "Lip Oil Pêssego",
+    "qtd": 1,
+    "valor": 40,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-04-01",
+    "status": "PENDENTE"
+  },
+  {
+    "id": 9,
+    "cliente": "Philipe",
+    "produto": "Kit Pessegura",
+    "qtd": 1,
+    "valor": 55,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-03-20",
+    "status": "PENDENTE"
+  },
+  {
+    "id": 10,
+    "cliente": "Selma",
+    "produto": "Semi Matte",
+    "qtd": 1,
+    "valor": 20,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-03-15",
+    "status": "PAGO"
+  },
+  {
+    "id": 11,
+    "cliente": "Selma",
+    "produto": "Kit Pessegura",
+    "qtd": 1,
+    "valor": 55,
+    "desconto": 0,
+    "dataVenda": "2026-03-01",
+    "dataPrev": "2026-04-01",
+    "status": "PENDENTE"
+  }
+]
