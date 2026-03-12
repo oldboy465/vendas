@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultora Keila s2 - Gestão de Vendas</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --surface-hover: #2c2c2c;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --border-color: #333333;
+            
+            /* Cores inspiradas nas imagens */
+            --accent-pink: #e91e63;
+            --accent-purple: #9c27b0;
+            --accent-green: #00c853;
+            --accent-teal: #00bcd4;
+            --danger: #f44336;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 10px;
+            padding-bottom: 100px; /* Aumentado o espaço para o rodapé no mobile */
+        }
+
+        /* Melhoria Mobile: Flex column para não espremer botões */
+        header {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--accent-pink);
+            width: 100%;
+        }
+
+        /* Melhoria Mobile: Botões superiores ocupando tela toda e maiores para toque */
+        .actions-top {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .actions-top button {
+            background: var(--surface-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 12px 10px; 
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .actions-top button:hover { background: var(--surface-hover); }
+
+        /* Formulário */
+        .card {
+            background: var(--surface-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px; /* Gap levemente maior para respiro */
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        /* Melhoria Mobile: Inputs maiores (touch targets) */
+        input, select {
+            background: var(--bg-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 14px 10px;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+
+        /* Melhoria Mobile: Botões principais mais altos */
+        .btn-add {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            margin-top: 10px;
+            flex: 1;
+        }
+
+        .btn-cancel {
+            background-color: #555555;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            margin-top: 10px;
+            flex: 1;
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* Filtros */
+        /* Melhoria Mobile: Empilhar filtros */
+        .filters {
+            display: flex;
+            flex-direction: column; 
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .filters select, .filters input {
+            flex: 1;
+            padding: 14px 10px; /* Maior área de toque */
+        }
+
+        /* Lista de Registros */
+        .record-card {
+            background: var(--surface-color);
+            border-left: 4px solid var(--accent-pink);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .record-card.pago { border-left-color: var(--accent-green); }
+        .record-card.pendente { border-left-color: var(--danger); }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .client-name { font-weight: bold; font-size: 1.2rem; }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.pago { background: #1b5e20; color: #a5d6a7; }
+        .status-badge.pendente { background: #b71c1c; color: #ffcdd2; }
+
+        .record-details {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        /* Melhoria Mobile: Transformar em GRID para botões não ficarem soltos/quebrados na linha */
+        .record-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-copy, .btn-toggle, .btn-edit {
+            min-width: 80px;
+            padding: 12px 8px; /* Touch target ampliado */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* O botão de copiar ganha destaque total ocupando 2 colunas */
+        .btn-copy { 
+            background: var(--accent-purple); 
+            color: white; 
+            grid-column: span 2; 
+            font-size: 0.95rem;
+        }
+        
+        .btn-edit { background: var(--accent-teal); color: white; }
+        .btn-toggle { background: var(--surface-hover); color: white; border: 1px solid var(--border-color); }
+        .btn-delete { 
+            background: var(--danger); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        /* Rodapé Fixo / Resumo PDV */
+        .summary-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--surface-color);
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 5px;
+            z-index: 100;
+            box-shadow: 0px -2px 10px rgba(0,0,0,0.5); /* Adiciona sombra para dar relevo */
+        }
+
+        .summary-item {
+            text-align: center;
+            flex: 1; /* Distribui o espaço igualmente */
+        }
+
+        .summary-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        /* Melhoria Mobile: Ajuste dinâmico de texto para valores na barra inferior */
+        .summary-value {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: bold;
+        }
+
+        .value-green { color: var(--accent-green); }
+        .value-red { color: var(--danger); }
+
+        /* Responsividade para Desktop */
+        @media (min-width: 768px) {
+            body { max-width: 1000px; margin: 0 auto; }
+            
+            header { 
+                flex-direction: row; 
+                text-align: left;
+            }
+            .actions-top { width: auto; }
+            
+            .form-grid { grid-template-columns: repeat(4, 1fr); }
+            .input-group.full-width { grid-column: span 4; }
+            .form-actions { grid-column: span 4; }
+            
+            .filters { flex-direction: row; }
+            
+            .record-card {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .record-details { display: flex; gap: 20px; flex: 1; margin: 0 20px; }
+            
+            /* Volta o layout dos botões para linha contínua no computador */
+            .record-actions { 
+                display: flex;
+                margin-top: 0; 
+                width: auto; 
+            }
+            .btn-copy { grid-column: auto; }
+            
+            .summary-bar { padding: 15px 10px; }
+            .summary-label { font-size: 0.7rem; }
+            .summary-value { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>💄 Consultora Keila s2</h1>
+        <div class="actions-top">
+            <button onclick="exportData()">⬇️ Exportar JSON</button>
+            <button onclick="document.getElementById('importFile').click()">⬆️ Importar JSON</button>
+            <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
+        </div>
+    </header>
+
+    <main>
+        <section class="card">
+            <form id="salesForm" onsubmit="addOrUpdateRecord(event)">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Cliente</label>
+                        <input type="text" id="cliente" required placeholder="Ex: Aryelle">
+                    </div>
+                    <div class="input-group">
+                        <label>Produto</label>
+                        <input type="text" id="produto" required placeholder="Ex: Batom Matte">
+                    </div>
+                    <div class="input-group">
+                        <label>Qtd</label>
+                        <input type="number" id="qtd" required min="1" value="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Valor Unit. (R$)</label>
+                        <input type="number" id="valor" required step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="input-group">
+                        <label>Desconto (R$)</label>
+                        <input type="number" id="desconto" step="0.01" value="0.00">
+                    </div>
+                    <div class="input-group">
+                        <label>Data Venda</label>
+                        <input type="date" id="dataVenda" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Prev. Pagamento</label>
+                        <input type="date" id="dataPrev" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="PENDENTE">A Receber</option>
+                            <option value="PAGO">Pago</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-add" id="btnSubmit">➕ Lançar Venda</button>
+                        <button type="button" class="btn-cancel" id="btnCancelEdit" onclick="cancelEdit()">❌ Cancelar Edição</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="filters">
+            <input type="text" id="search" placeholder="🔍 Buscar cliente..." oninput="renderList()">
+            <select id="filterStatus" onchange="renderList()">
+                <option value="ALL">Todos os Status</option>
+                <option value="PENDENTE">Só Devendo (Pendentes)</option>
+                <option value="PAGO">Só Pagos</option>
+            </select>
+        </section>
+
+        <section id="recordsList">
+            </section>
+    </main>
+
+    <div class="summary-bar">
+        <div class="summary-item">
+            <div class="summary-label">Total Vendido</div>
+            <div class="summary-value" id="totVendido">R$ 0,00</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">Recebido</div>
+            <div class="summary-value value-green" id="totPago">R$ 0,00</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">A Receber</div>
+            <div class="summary-value value-red" id="totPendente">R$ 0,00</div>
+        </div>
+    </div>
+
+    <script>
+        // Dados Iniciais baseados na lista fornecida
+        let db = [
+            { id: 1, cliente: 'Aryelle', produto: 'Batom Matte', qtd: 1, valor: 20, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-15', status: 'PAGO' },
+            { id: 2, cliente: 'Ariele', produto: 'Lip Oil Morango', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-15', status: 'PAGO' },
+            { id: 3, cliente: 'Aryelle', produto: 'Kit Pessegura', qtd: 2, valor: 55, desconto: 0, dataVenda: '2024-04-01', dataPrev: '2024-04-10', status: 'PENDENTE' },
+            { id: 4, cliente: 'Brena', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2024-04-01', dataPrev: '2024-04-10', status: 'PENDENTE' },
+            { id: 5, cliente: 'Bruna', produto: 'Lip Oil Pêssego', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
+            { id: 6, cliente: 'Emilene', produto: 'Lip Oil Morango', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
+            { id: 7, cliente: 'Jonata', produto: 'Limp Tint', qtd: 1, valor: 15, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
+            { id: 8, cliente: 'Jotania', produto: 'Lip Oil Pêssego', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
+            { id: 9, cliente: 'Philipe', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
+            { id: 10, cliente: 'Selma', produto: 'Semi Matte', qtd: 1, valor: 20, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-15', status: 'PAGO' },
+            { id: 11, cliente: 'Selma', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2024-04-01', dataPrev: '2024-04-15', status: 'PENDENTE' }
+        ];
+
+        let editingId = null; // Variável para controlar o estado de edição
+
+        // Inicializa data de hoje nos inputs
+        document.getElementById('dataVenda').valueAsDate = new Date();
+        document.getElementById('dataPrev').valueAsDate = new Date();
+
+        function calcularTotalItem(item) {
+            return (item.qtd * item.valor) - item.desconto;
+        }
+
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function formatDate(dateString) {
+            if(!dateString) return '--/--/----';
+            const [y, m, d] = dateString.split('-');
+            return `${d}/${m}/${y}`;
+        }
+
+        function renderList() {
+            const listEl = document.getElementById('recordsList');
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const filterStatus = document.getElementById('filterStatus').value;
+
+            listEl.innerHTML = '';
+            
+            let tVendido = 0, tPago = 0, tPendente = 0;
+
+            const filtered = db.filter(item => {
+                const matchName = item.cliente.toLowerCase().includes(searchTerm);
+                const matchStatus = filterStatus === 'ALL' || item.status === filterStatus;
+                return matchName && matchStatus;
+            }).sort((a, b) => new Date(a.dataPrev) - new Date(b.dataPrev));
+
+            filtered.forEach(item => {
+                const totalItem = calcularTotalItem(item);
+                tVendido += totalItem;
+                if (item.status === 'PAGO') tPago += totalItem;
+                else tPendente += totalItem;
+
+                const card = document.createElement('div');
+                card.className = `record-card ${item.status.toLowerCase()}`;
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="record-header">
+                            <span class="client-name">${item.cliente}</span>
+                            <span class="status-badge ${item.status.toLowerCase()}">${item.status}</span>
+                        </div>
+                        <div class="record-details">
+                            <span>📦 ${item.qtd}x ${item.produto}</span>
+                            <span>💰 ${formatCurrency(totalItem)}</span>
+                            <span>Venda: ${formatDate(item.dataVenda)}</span>
+                            <span>Venc: ${formatDate(item.dataPrev)}</span>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        ${item.status === 'PENDENTE' ? 
+                            `<button class="btn-copy" onclick="copyMessage(${item.id})">📋 Cobrar</button>` : ''}
+                        <button class="btn-edit" onclick="editRecord(${item.id})">✏️ Editar</button>
+                        <button class="btn-toggle" onclick="toggleStatus(${item.id})">
+                            ${item.status === 'PAGO' ? 'Pendente' : 'Pago'}
+                        </button>
+                        <button class="btn-delete" onclick="deleteRecord(${item.id})">🗑️</button>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+
+            // Atualiza Dashboard
+            document.getElementById('totVendido').innerText = formatCurrency(tVendido);
+            document.getElementById('totPago').innerText = formatCurrency(tPago);
+            document.getElementById('totPendente').innerText = formatCurrency(tPendente);
+        }
+
+        function addOrUpdateRecord(e) {
+            e.preventDefault();
+            
+            const clienteVal = document.getElementById('cliente').value;
+            const produtoVal = document.getElementById('produto').value;
+            const qtdVal = parseFloat(document.getElementById('qtd').value);
+            const valorVal = parseFloat(document.getElementById('valor').value);
+            const descontoVal = parseFloat(document.getElementById('desconto').value) || 0;
+            const dataVendaVal = document.getElementById('dataVenda').value;
+            const dataPrevVal = document.getElementById('dataPrev').value;
+            const statusVal = document.getElementById('status').value;
+
+            if (editingId !== null) {
+                // Modo Edição (Update)
+                const index = db.findIndex(i => i.id === editingId);
+                if (index !== -1) {
+                    db[index] = {
+                        id: editingId,
+                        cliente: clienteVal,
+                        produto: produtoVal,
+                        qtd: qtdVal,
+                        valor: valorVal,
+                        desconto: descontoVal,
+                        dataVenda: dataVendaVal,
+                        dataPrev: dataPrevVal,
+                        status: statusVal
+                    };
+                }
+                cancelEdit(); // Limpa o form e sai do modo de edição
+            } else {
+                // Modo Criação (Create)
+                const newItem = {
+                    id: Date.now(),
+                    cliente: clienteVal,
+                    produto: produtoVal,
+                    qtd: qtdVal,
+                    valor: valorVal,
+                    desconto: descontoVal,
+                    dataVenda: dataVendaVal,
+                    dataPrev: dataPrevVal,
+                    status: statusVal
+                };
+                db.push(newItem);
+                
+                // Reseta apenas no modo de criação
+                e.target.reset();
+                document.getElementById('dataVenda').valueAsDate = new Date();
+                document.getElementById('dataPrev').valueAsDate = new Date();
+            }
+            
+            renderList();
+        }
+
+        function editRecord(id) {
+            const item = db.find(i => i.id === id);
+            if (!item) return;
+
+            // Preenche o formulário com os dados do item
+            editingId = id;
+            document.getElementById('cliente').value = item.cliente;
+            document.getElementById('produto').value = item.produto;
+            document.getElementById('qtd').value = item.qtd;
+            document.getElementById('valor').value = item.valor;
+            document.getElementById('desconto').value = item.desconto;
+            document.getElementById('dataVenda').value = item.dataVenda;
+            document.getElementById('dataPrev').value = item.dataPrev;
+            document.getElementById('status').value = item.status;
+
+            // Altera visual dos botões
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.innerHTML = '💾 Salvar Alterações';
+            btnSubmit.style.backgroundColor = 'var(--accent-teal)';
+            
+            document.getElementById('btnCancelEdit').style.display = 'block';
+
+            // Rola a página suavemente para o topo (formulário)
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            editingId = null;
+            document.getElementById('salesForm').reset();
+            
+            // Restaura datas para hoje
+            document.getElementById('dataVenda').valueAsDate = new Date();
+            document.getElementById('dataPrev').valueAsDate = new Date();
+            
+            // Restaura visual dos botões
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.innerHTML = '➕ Lançar Venda';
+            btnSubmit.style.backgroundColor = 'var(--accent-green)';
+            
+            document.getElementById('btnCancelEdit').style.display = 'none';
+        }
+
+        function toggleStatus(id) {
+            const item = db.find(i => i.id === id);
+            if (item) {
+                item.status = item.status === 'PAGO' ? 'PENDENTE' : 'PAGO';
+                renderList();
+            }
+        }
+
+        function deleteRecord(id) {
+            if(confirm('Tem certeza que deseja apagar este registro?')) {
+                db = db.filter(i => i.id !== id);
+                renderList();
+            }
+        }
+
+        function copyMessage(id) {
+            const item = db.find(i => i.id === id);
+            if (!item) return;
+
+            const total = formatCurrency(calcularTotalItem(item));
+            const dataVenc = formatDate(item.dataPrev);
+            
+            const msg = `Oii ${item.cliente}, tudo bem? ✨\n\nPassando para lembrar do seu pedido com a Keila:\n🛍️ ${item.qtd}x ${item.produto}\n💰 Valor Total: ${total}\n📅 Previsão: ${dataVenc}\n\nQualquer dúvida estou por aqui! Beijos da Keila s2 💄`;
+            
+            navigator.clipboard.writeText(msg).then(() => {
+                alert('Mensagem copiada para a área de transferência! Pronto para colar no WhatsApp.');
+            }).catch(err => {
+                alert('Erro ao copiar: ' + err);
+            });
+        }
+
+        // Funções de JSON
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "keila_db_vendas.json");
+            document.body.appendChild(downloadAnchorNode); // requerido para firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if(Array.isArray(imported)) {
+                        db = imported;
+                        renderList();
+                        alert('Banco de dados importado com sucesso!');
+                    } else {
+                        alert('Formato de arquivo inválido.');
+                    }
+                } catch (err) {
+                    alert('Erro ao ler o arquivo JSON.');
+                }
+            };
+            reader.readAsText(file);
+            // Reseta o input de arquivo
+            event.target.value = '';
+        }
+
+        // Inicializa a tela
+        renderList();
+    </script>
+</body>
+</html>
