@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultora Keila s2 - Gestão de Vendas</title>
+    <title>Consultora Keila 🩷 - Gestão de Vendas</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -59,6 +59,7 @@
             display: flex;
             width: 100%;
             gap: 10px;
+            flex-wrap: wrap; /* Ajuste sutil para acomodar o 3º botão no mobile */
         }
 
         .actions-top button {
@@ -328,6 +329,7 @@
     <header>
         <h1>💄 Consultora Keila s2</h1>
         <div class="actions-top">
+            <button onclick="copyReportMessage()">📋 Relatório Wpp</button>
             <button onclick="exportData()">⬇️ Exportar JSON</button>
             <button onclick="document.getElementById('importFile').click()">⬆️ Importar JSON</button>
             <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
@@ -412,17 +414,17 @@
     <script>
         // Dados Iniciais baseados na lista fornecida
         let db = [
-            { id: 1, cliente: 'Aryelle', produto: 'Batom Matte', qtd: 1, valor: 20, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-15', status: 'PAGO' },
-            { id: 2, cliente: 'Ariele', produto: 'Lip Oil Morango', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-15', status: 'PAGO' },
-            { id: 3, cliente: 'Aryelle', produto: 'Kit Pessegura', qtd: 2, valor: 55, desconto: 0, dataVenda: '2024-04-01', dataPrev: '2024-04-10', status: 'PENDENTE' },
-            { id: 4, cliente: 'Brena', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2024-04-01', dataPrev: '2024-04-10', status: 'PENDENTE' },
-            { id: 5, cliente: 'Bruna', produto: 'Lip Oil Pêssego', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
-            { id: 6, cliente: 'Emilene', produto: 'Lip Oil Morango', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
-            { id: 7, cliente: 'Jonata', produto: 'Limp Tint', qtd: 1, valor: 15, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
-            { id: 8, cliente: 'Jotania', produto: 'Lip Oil Pêssego', qtd: 1, valor: 40, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
-            { id: 9, cliente: 'Philipe', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-20', status: 'PENDENTE' },
-            { id: 10, cliente: 'Selma', produto: 'Semi Matte', qtd: 1, valor: 20, desconto: 0, dataVenda: '2024-03-01', dataPrev: '2024-03-15', status: 'PAGO' },
-            { id: 11, cliente: 'Selma', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2024-04-01', dataPrev: '2024-04-15', status: 'PENDENTE' }
+            { id: 1, cliente: 'Aryelle', produto: 'Batom Matte', qtd: 1, valor: 20, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-03-15', status: 'PAGO' },
+            { id: 2, cliente: 'Ariele', produto: 'Lip Oil Morango', qtd: 1, valor: 40, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-03-15', status: 'PAGO' },
+            { id: 3, cliente: 'Aryelle', produto: 'Kit Pessegura', qtd: 2, valor: 55, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-04-10', status: 'PENDENTE' },
+            { id: 4, cliente: 'Brena', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-04-01', status: 'PENDENTE' },
+            { id: 5, cliente: 'Bruna', produto: 'Lip Oil Pêssego', qtd: 1, valor: 40, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-04-10', status: 'PENDENTE' },
+            { id: 6, cliente: 'Emilene', produto: 'Lip Oil Morango', qtd: 1, valor: 40, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-03-20', status: 'PAGO' },
+            { id: 7, cliente: 'Jonata', produto: 'Limp Tint', qtd: 1, valor: 15, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-04-01', status: 'PAGO' },
+            { id: 8, cliente: 'Jotania', produto: 'Lip Oil Pêssego', qtd: 1, valor: 40, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-04-01', status: 'PENDENTE' },
+            { id: 9, cliente: 'Philipe', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-03-20', status: 'PENDENTE' },
+            { id: 10, cliente: 'Selma', produto: 'Semi Matte', qtd: 1, valor: 20, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-03-15', status: 'PAGO' },
+            { id: 11, cliente: 'Selma', produto: 'Kit Pessegura', qtd: 1, valor: 55, desconto: 0, dataVenda: '2026-03-01', dataPrev: '2026-04-01', status: 'PENDENTE' }
         ];
 
         let editingId = null; // Variável para controlar o estado de edição
@@ -660,6 +662,42 @@
             reader.readAsText(file);
             // Reseta o input de arquivo
             event.target.value = '';
+        }
+
+        // Nova Função Solicitada: Relatório para WhatsApp
+        function copyReportMessage() {
+            let pagos = db.filter(i => i.status === 'PAGO');
+            let pendentes = db.filter(i => i.status === 'PENDENTE');
+
+            let tPago = 0, tPendente = 0;
+
+            let msg = `💄 *Relatório de Vendas - Consultora Keila s2* 💄\n\n`;
+
+            msg += `✅ *PAGOS*\n`;
+            if (pagos.length === 0) msg += `Nenhum pagamento registrado.\n`;
+            pagos.forEach(item => {
+                let totalItem = calcularTotalItem(item);
+                tPago += totalItem;
+                msg += `- ${item.cliente}: ${item.qtd}x ${item.produto} - ${formatCurrency(totalItem)}\n`;
+            });
+            msg += `\n*Subtotal Recebido:* ${formatCurrency(tPago)}\n\n`;
+
+            msg += `⏳ *PENDENTES (A Receber)*\n`;
+            if (pendentes.length === 0) msg += `Nenhuma pendência.\n`;
+            pendentes.forEach(item => {
+                let totalItem = calcularTotalItem(item);
+                tPendente += totalItem;
+                msg += `- ${item.cliente}: ${item.qtd}x ${item.produto} - ${formatCurrency(totalItem)} (Venc: ${formatDate(item.dataPrev)})\n`;
+            });
+            msg += `\n*Subtotal a Receber:* ${formatCurrency(tPendente)}\n\n`;
+
+            msg += `💰 *TOTAL GERAL (Vendido):* ${formatCurrency(tPago + tPendente)}\n`;
+
+            navigator.clipboard.writeText(msg).then(() => {
+                alert('Relatório copiado para a área de transferência! Pronto para colar no WhatsApp para a Keila.');
+            }).catch(err => {
+                alert('Erro ao copiar: ' + err);
+            });
         }
 
         // Inicializa a tela
